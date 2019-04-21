@@ -1,15 +1,17 @@
+
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.lang.Integer;
+import java.util.List;
 
 public class binaryTreeReturnList{
     /*
    ###############定义一个节点类，使二叉树与节点类分离##########################
      */
     static class Node {
-        int  value;
+        int value;
         Node leftChild;
         Node rightChild;
 
@@ -32,9 +34,10 @@ public class binaryTreeReturnList{
 
         BinaryTree(int value) {
             root = new Node(value);
-            root.leftChild  = null;
+            root.leftChild = null;
             root.rightChild = null;
         }
+
         /*
 ##################二叉树的查找方法#####################
          */
@@ -45,7 +48,7 @@ public class binaryTreeReturnList{
                     return current;
                 } else if (value < current.value) {
                     current = current.leftChild;
-                } else if (value > current.value) {
+                } else {
                     current = current.rightChild;
                 }
 
@@ -55,6 +58,7 @@ public class binaryTreeReturnList{
             }
 
         }
+
         /*
 #################二叉树的元素插入方法(插入完成后为二叉查找树)####################
          */
@@ -64,7 +68,7 @@ public class binaryTreeReturnList{
             Node node = new Node(value);
             if (root == null) {
                 root = node;
-                root.leftChild  = null;
+                root.leftChild = null;
                 root.rightChild = null;
             } else {
                 Node current = root;
@@ -91,38 +95,54 @@ public class binaryTreeReturnList{
             }
             return error;
         }  //插入
-/*
-##############################层序遍历实现################
- */
-        public ArrayList layerOrderTraverse(){
-            ArrayList<Integer> List= new ArrayList<>();
+
+        /*
+ ##############################层序遍历实现非递归################
+         */
+        public ArrayList layerOrderTraverse() {
+            ArrayList<Integer> List = new ArrayList<>();
             Node current = root;
-            if(current == null){return List;}
+            if (current == null) {
+                return List;
+            }
             Queue<Node> queue = new LinkedList<>();
-            queue.add(current);;
-            while(queue.size()!=0){
+            queue.add(current);
+            ;
+            while (queue.size() != 0) {
                 current = queue.poll();
                 List.add(current.value);
-                if(current.leftChild!=null){
+                if (current.leftChild != null) {
                     queue.offer(current.leftChild);
                 }
-                if(current.rightChild!=null){
+                if (current.rightChild != null) {
                     queue.offer(current.rightChild);
                 }
-            }return List;
+            }
+            return List;
+        }
+        /*
+ ##############################层序遍历实现递归方式################
+         */
+        public ArrayList layerOrderTraverseD() {
+            ArrayList<Integer> L=new ArrayList<>();
+            layerOrderTraverseD1(root, L);
+            return L;
+        }
+        public static void layerOrderTraverseD1(Node t,List<Integer> L) {
+            if(t==null)return;
+            L.add(t.value);
+            layerOrderTraverseD1(t.leftChild, L);
+            layerOrderTraverseD1(t.rightChild, L);
         }
 
 
         /*
-###############中序遍历实现，返回List，非递归实现（递归不可能返回List）#########################
+###############中序遍历实现，返回List，非递归实现#########################
         */
         public ArrayList inOrderByStack() {
             Stack<Node> stack = new Stack<Node>();
-            ArrayList<Integer> List_1= new ArrayList<>();
+            ArrayList<Integer> List_1 = new ArrayList<>();
             Node current = root;
-            if(current == null){
-                return null;
-            }
             while (current != null || !stack.isEmpty()) {
                 while (current != null) {
                     stack.push(current);
@@ -136,11 +156,26 @@ public class binaryTreeReturnList{
                 }
             }
             return List_1;
-        }     //中序遍历非递归操作
+        }
+/*
+###############中序遍历实现，返回List，递归实现#########################
+        */
+        public ArrayList inOrderByStackD() {
+            ArrayList<Integer> L=new ArrayList<>();
+            inOrderTraverseD1(root,L);
+            return L;
+        }
+        public static void inOrderTraverseD1(Node t,List<Integer> L) {
+            if (t==null){return;}
+            inOrderTraverseD1(t.leftChild,L);
+            L.add(t.value);
+            inOrderTraverseD1(t.rightChild,L);
+        }
 
 
 
-    public static void main(String[] args) {
+
+        public static void main(String[] args) {
         BinaryTree bt = new BinaryTree(52);
         bt.insert(580);
         bt.insert(12);
@@ -153,16 +188,14 @@ public class binaryTreeReturnList{
         bt.insert(666);
         bt.insert(455);
         bt.insert(777);
-        bt.insert(999);
-        ArrayList<Integer> List = bt.inOrderByStack();
+        ArrayList<Integer> List = bt.inOrderByStackD();
         for(int num:List){
             System.out.print(num+" ");
         }
         System.out.print("\n");
-        ArrayList<Integer> List2 = bt.layerOrderTraverse();
+        ArrayList<Integer> List2 = bt.inOrderByStack();
         for(int num1:List2){
             System.out.print(num1+" ");
         }
     }
 }}
-
