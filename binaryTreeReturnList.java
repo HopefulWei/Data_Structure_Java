@@ -97,7 +97,7 @@ public class binaryTreeReturnList{
         }  //插入
 
         /*
- ##############################层序遍历实现非递归################
+ ##############################前序遍历实现非递归################
          */
         public ArrayList layerOrderTraverse() {
             ArrayList<Integer> List = new ArrayList<>();
